@@ -1,0 +1,40 @@
+{
+  "editor.codeActions.triggerOnFocusChange": true,
+  "eslint.codeActionsOnSave.rules": null,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.advanced": {},
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": ".github/copilot-instructions.md"
+    },
+    {
+      "file": ".github/shared/copilot-instructions.md"
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "file": ".github/test-instructions.md"
+    },
+    {
+      "file": ".github/shared/test-instructions.txt"
+    }
+  ],
+  "github.copilot.enable": {
+    "*": true
+  },
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true,
+    ".github/shared/prompts": true
+  },
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.agent.thinkingTool": true,
+  "nxConsole.generateAiAgentRules": true,
+  "svg.preview.background": "dark-transparent"
+}

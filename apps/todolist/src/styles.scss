@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+
+@theme {
+  --font-body: 'Alegreya Sans';
+  --font-title: 'Inter', 'sans-serif';
+  --font-decotitle: 'Raleway', 'sans-serif';
+  --letter-spacing-x: 0.2rem;
+  --letter-spacing-xl: 0.4rem;
+  --animation-spin-slow: spin 4s linear infinite;
+
+  --color-primary: #3490dc;
+  --color-secondary: #ffed4a;
+  --color-success: #38c172;
+  --color-danger: #ef4444;
+  --color-warning: #f6993f;
+  --color-dark: #22292f;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+}

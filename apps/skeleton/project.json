@@ -1,0 +1,124 @@
+{
+  "name": "skeleton",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/skeleton/src",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {},
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [],
+      "inputs": [
+        "default",
+        "{projectRoot}/**/*.{ts,tsx,js,jsx,html}",
+        "{workspaceRoot}/eslint.config.js"
+      ]
+    },
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/skeleton",
+        "index": "apps/skeleton/src/index.html",
+        "main": "apps/skeleton/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/skeleton/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/skeleton/public"
+          }
+        ],
+        "styles": [
+          "apps/skeleton/src/styles.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production",
+      "parallelism": true,
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "skeleton:build:production"
+        },
+        "development": {
+          "buildTarget": "skeleton:build:development",
+          "port": 4300
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {},
+      "parallelism": true
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "skeleton:build"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/skeleton/jest.config.ts"
+      },
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [
+        "^test"
+      ]
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "skeleton:build",
+        "port": 4300,
+        "staticFilePath": "dist/apps/skeleton/browser",
+        "spa": true
+      },
+      "configurations": {},
+      "parallelism": true
+    }
+  },
+  "implicitDependencies": []
+}

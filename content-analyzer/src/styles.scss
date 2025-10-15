@@ -1,0 +1,19 @@
+@use 'tailwindcss';
+
+@theme {
+  --color-background: #f8fafc;
+  --color-primary: #ffffff;
+  --color-secondary: #fef3c7;
+  --color-accent: #329663;
+  --color-card: #ffffff;
+  --color-dark: #1f2937;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none; /* Chrome/Safari */
+  -moz-appearance: none; /* Firefox */
+  background: url('data:image/svg+xml;utf8,<svg fill="gray" height="16" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M5.516 7.548a.625.625 0 0 1 .884-.884l3.6 3.6 3.6-3.6a.625.625 0 1 1 .884.884l-4.042 4.042a.625.625 0 0 1-.884 0z"/></svg>')
+    no-repeat right 0.75rem center/1em;
+  padding-right: 2.5em;
+}

@@ -1,0 +1,134 @@
+services:
+  # MongoDB Database service
+  mongo:
+    image: mongo:7
+    # Maps port 9005 on the host to port 27017 in the container (MongoDB's default port)
+    # The ${MONGO_CLIENT_PORT:-9005} allows overriding the host port via environment variable
+    ports:
+      - '${MONGO_CLIENT_PORT:-9005}:27017'
+    # Environment variables to configure the MongoDB container
+    environment:
+      # Sets the initial database name, defaulting to 'mydatabase' if DB_NAME is not set
+      - MONGO_INITDB_DATABASE=${DB_NAME:-mydatabase}
+    # Defines persistent storage and initialization scripts
+    volumes:
+      # Persists MongoDB data in a named volume 'mongo_data' mapped to /data/db in the container
+      - mongo_data:/data/db
+      # Mounts a local directory './mongo-init' to initialize the database with scripts
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    # Connects this service to the specified network
+    networks:
+      - content-analyzer-network
+    # Restarts the container unless it is explicitly stopped
+    restart: unless-stopped
+
+  # PostgreSQL Database service
+  postgres:
+    image: postgres:15
+    # Maps port 5432 on the host to port 5432 in the container (PostgreSQL's default port)
+    ports:
+      - '5432:5432'
+    # Environment variables to configure the PostgreSQL container
+    environment:
+      # Sets the database name to 'content_analyzer'
+      - POSTGRES_DB=${POSTGRES_DB:-content_analyzer}
+      # Sets the database user to 'postgres'
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      # Sets the database password to 'password' (not recommended for production)
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+    # Defines persistent storage and initialization scripts
+    volumes:
+      # Persists PostgreSQL data in a named volume 'postgres_data' mapped to /var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      # Mounts a local directory './postgres-init' to initialize the database with scripts
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    # Connects this service to the specified network
+    networks:
+      - content-analyzer-network
+    # Restarts the container unless it is explicitly stopped
+    restart: unless-stopped
+
+  # Redis Cache service
+  # redis:
+  #   # Specifies the Docker image to use (Redis version 7, lightweight Alpine variant)
+  #   image: redis:7-alpine
+  #   # Maps port 6379 on the host to port 6379 in the container (Redis's default port)
+  #   ports:
+  #     - '6379:6379'
+  #   # Defines persistent storage for Redis data
+  #   volumes:
+  #     # Persists Redis data in a named volume 'redis_data' mapped to /data in the container
+  #     - redis_data:/data
+  #   # Connects this service to the specified network
+  #   networks:
+  #     - content-analyzer-network
+  #   # Restarts the container unless it is explicitly stopped
+  #   restart: unless-stopped
+  #   # Custom command to start Redis with append-only mode for data persistence
+  #   command: redis-server --appendonly yes
+
+  # MongoDB Admin UI (optional web-based interface for MongoDB)
+  # mongo-express:
+  #   # Specifies the Docker image to use (official mongo-express image)
+  #   image: mongo-express
+  #   # Maps port 8081 on the host to port 8081 in the container
+  #   ports:
+  #     - '8081:8081'
+  #   # Environment variables to configure mongo-express
+  #   environment:
+  #     # Specifies the MongoDB server to connect to (references the 'mongo' service)
+  #     - ME_CONFIG_MONGODB_SERVER=mongo
+  #     # Specifies the MongoDB port
+  #     - ME_CONFIG_MONGODB_PORT=27017
+  #     # Sets the admin username for mongo-express
+  #     - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME:-admin}
+  #     # Sets the admin password for mongo-express (not recommended for production)
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD:-admin123}
+  #   # Ensures mongo-express starts only after the 'mongo' service is running
+  #   depends_on:
+  #     - mongo
+  #   # Connects this service to the specified network
+  #   networks:
+  #     - content-analyzer-network
+  #   # Restarts the container unless it is explicitly stopped
+  #   restart: unless-stopped
+
+  # # pgAdmin for PostgreSQL (optional web-based interface for PostgreSQL)
+  # pgadmin:
+  #   # Specifies the Docker image to use (official pgAdmin4 image)
+  #   image: dpage/pgadmin4
+  #   # Maps port 8080 on the host to port 80 in the container
+  #   ports:
+  #     - '8080:80'
+  #   # Environment variables to configure pgAdmin
+  #   environment:
+  #     # Sets the default email for pgAdmin login
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+  #     # Sets the default password for pgAdmin login (not recommended for production)
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin123}
+  #   # Defines persistent storage for pgAdmin configuration
+  #   volumes:
+  #     # Persists pgAdmin data in a named volume 'pgadmin_data' mapped to /var/lib/pgadmin
+  #     - pgadmin_data:/var/lib/pgadmin
+  #   # Ensures pgAdmin starts only after the 'postgres' service is running
+  #   depends_on:
+  #     - postgres
+  #   # Connects this service to the specified network
+  #   networks:
+  #     - content-analyzer-network
+  #   # Restarts the container unless it is explicitly stopped
+  #   restart: unless-stopped
+
+# Defines named volumes for persistent data storage
+volumes:
+  mongo_data:
+  postgres_data:
+  redis_data:
+  pgadmin_data:
+
+# Defines a custom network for communication between services
+networks:
+  # Creates a bridge network named 'content-analyzer-network'
+  content-analyzer-network:
+    # Uses the bridge driver, allowing containers to communicate while isolating them from other networks
+    driver: bridge

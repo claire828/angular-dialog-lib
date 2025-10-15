@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/web/settings/hmr/src",
+  "prefix": "monorepo",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/web/settings/hmr/**/*.ts",
+          "libs/web/settings/hmr/**/*.html"
+        ]
+      },
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [],
+      "inputs": [
+        "default",
+        "{projectRoot}/**/*.{ts,tsx,js,jsx,html}",
+        "{workspaceRoot}/eslint.config.js"
+      ]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/libs/web/settings/hmr"
+      ],
+      "options": {
+        "jestConfig": "libs/web/settings/hmr/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [
+        "^test"
+      ]
+    }
+  },
+  "tags": [],
+  "name": "hmr",
+  "implicitDependencies": []
+}

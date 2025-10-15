@@ -1,0 +1,64 @@
+{
+  "name": "content-analyzer-backend",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "content-analyzer-backend/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/content-analyzer-backend",
+        "main": "content-analyzer-backend/src/main.ts",
+        "tsConfig": "content-analyzer-backend/tsconfig.app.json",
+        "webpackConfig": "content-analyzer-backend/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": false
+        },
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "content-analyzer-backend/src/environments/environment.ts",
+              "with": "content-analyzer-backend/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "content-analyzer-backend:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "content-analyzer-backend:build:development"
+        },
+        "production": {
+          "buildTarget": "content-analyzer-backend:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "content-analyzer-backend/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

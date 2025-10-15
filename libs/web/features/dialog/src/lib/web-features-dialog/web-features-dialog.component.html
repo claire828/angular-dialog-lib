@@ -1,0 +1,26 @@
+<div class="flex h-64 w-96 flex-col items-center justify-center rounded-md bg-white p-4 shadow-lg">
+  <span class="mb-4 h-4 w-full text-center text-lg font-medium text-gray-600">{{
+    config.title
+  }}</span>
+
+  <!-- text section-->
+  @if (config.content) {
+    <section class="w-full h-full text-sm {{ config.contentClasses }}">
+      {{ config.content }}
+    </section>
+  }
+
+  @if (config.contentComponent) {
+    <!-- dynamic component section: createComponent() adds component to the same level as the #content host element in the DOM,  -->
+    <section #content *ngIf="config.contentComponent"></section>
+  }
+
+  <!-- button section-->
+  <section class="flex items-center justify-center gap-4 p-2">
+    @for (btn of config.btns; track btn.type; let index = $index) {
+      <button (click)="sendEvent(btn.type)" class="{{ btn.classes }}">
+        {{ btn.displayName }}
+      </button>
+    }
+  </section>
+</div>

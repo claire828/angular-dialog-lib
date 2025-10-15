@@ -1,0 +1,37 @@
+{
+  "name": "todolist-store",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/stores/todolist-store/src",
+  "prefix": "todolist-store",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {},
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [],
+      "inputs": [
+        "default",
+        "{projectRoot}/**/*.{ts,tsx,js,jsx,html}",
+        "{workspaceRoot}/eslint.config.js"
+      ]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/stores/todolist-store/jest.config.ts"
+      },
+      "configurations": {},
+      "parallelism": true,
+      "dependsOn": [
+        "^test"
+      ]
+    }
+  },
+  "implicitDependencies": []
+}

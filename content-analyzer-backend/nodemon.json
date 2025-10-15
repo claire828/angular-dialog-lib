@@ -1,0 +1,5 @@
+{
+  "watch": ["content-analyzer-backend/src", "content-analyzer-backend/.env"],
+  "ext": "ts,json,env",
+  "exec": "tsx content-analyzer-backend/src/main.ts"
+}

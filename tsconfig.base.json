@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "paths": {
+      "@monorepo/web/settings/hmr": ["libs/web/settings/hmr/src/index.ts"],
+      "@monorepo/web/shared/data-access/models": [
+        "libs/web/shared/data-access/models/src/index.ts"
+      ],
+      "@monorepo/web/shared/directives": ["libs/web/shared/directives/src/index.ts"],
+      "@monorepo/web/shared/pipes": ["libs/web/shared/pipes/src/index.ts"],
+      "@monorepo/web/utils": ["libs/web/utils/src/index.ts"],
+      "core-ui-kit": ["libs/core-ui-kit/src/index.ts"],
+      "lib-todolist": ["libs/lib-todolist/src/index.ts"],
+      "shared": ["libs/shared/src/index.ts"],
+      "shared-express": ["libs/shared-express/src/index.ts"],
+      "shared-express/*": ["libs/shared-express/src/*"],
+      "shared-store": ["libs/stores/shared-store/src/index.ts"],
+      "todolist-store": ["libs/stores/todolist-store/src/index.ts"],
+      "web/features/dialog": ["libs/web/features/dialog/src/index.ts"],
+      "web/uis": ["libs/web/uis/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
