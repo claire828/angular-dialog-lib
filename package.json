@@ -5,22 +5,12 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js",
-    "start": "nx serves",
+    "start": "ng serve skeleton --port 4300 --hmr=true",
     "build": "nx build",
     "test": "npx nx affected:test",
-    "skeleton": "ng serve skeleton --port 4300 --hmr=true ",
-    "todolist": "ng serve todolist --port 4305 --hmr=true --verbose",
-    "content-analyzer": "ng serve content-analyzer --port 4306 --hmr=true ",
-    "content-analyzer-backend": "nx serve content-analyzer-backend",
-    "content-analyzer-backend:watch": "nx serve content-analyzer-backend --watch",
-    "content-analyzer-backend:nodemon": "nodemon --config content-analyzer-backend/nodemon.json",
-    "json-server": "json-server --watch db.json",
-    "generate-icons": "svg-generator",
     "graph": "nx graph",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write .",
-    "storybook": "npx storybook dev -p 6006 -c libs/core-ui-kit/.storybook",
-    "docs:json": "compodoc -p tsconfig.base.json -e json -d ./"
+    "format": "prettier --write ."
   },
   "private": true,
   "dependencies": {

@@ -1,27 +1,5 @@
 {
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
-  "projects": {
-    "tailwind-preset": {
-      "root": "libs/tailwind-preset",
-      "projectType": "library",
-      "sourceRoot": "libs/tailwind-preset/src",
-      "prefix": "app",
-      "architect": {}
-    },
-    "web-settings-hmr": {
-      "root": "libs/web/settings/hmr",
-      "projectType": "library",
-      "sourceRoot": "libs/web/settings/hmr/src",
-      "prefix": "app",
-      "architect": {}
-    },
-    "shared":{
-      "root": "libs/shared",
-      "projectType": "library",
-      "sourceRoot": "libs/shared/src",
-      "prefix": "shared",
-      "architect": {}
-    }
-  }
+  "projects": {}
 }
