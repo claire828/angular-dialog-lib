@@ -1,22 +1,22 @@
-# Dialog 開發者實作細節
+# Dialog Developer Implementation Details
 
-這份文件給「維護者」或「進階開發者」看，專注於 DialogService 與相關元件的實作、架構、型別安全、DI、工具與進階細節。
+This document is for maintainers or advanced developers, focusing on the implementation, architecture, type safety, DI, utilities, and advanced details of DialogService and related components.
 
 ---
 
-## 架構與流程
+## Architecture & Flow
 
-### 關鍵元件
+### Key Components
 
-- DialogService：彈窗 API 與 Overlay 管理
-- DialogComponentConfig / DefaultDialogConfig：彈窗設定
-- WebFeaturesDialogComponent：預設彈窗 UI
-- DecorateOverlayRef：彈窗參考與事件流
-- Providers/Utils：依賴注入與 Overlay 工具
+- DialogService: Dialog API and Overlay management
+- DialogComponentConfig / DefaultDialogConfig: Dialog configuration
+- WebFeaturesDialogComponent: Default dialog UI
+- DecorateOverlayRef: Dialog reference and event stream
+- Providers/Utils: Dependency injection and overlay utilities
 
-### 流程圖
+### Flowcharts
 
-#### 1. 父元件創立 dialog 並注入資料
+#### 1. Parent component creates dialog and injects data
 
 ```mermaid
 flowchart TD
@@ -27,7 +27,7 @@ flowchart TD
   C -- attaches --> D
 ```
 
-#### 2. DialogComponent 取得資料並回傳型別安全資料給父元件
+#### 2. DialogComponent receives data and returns type-safe data to parent
 
 ```mermaid
 flowchart TD
@@ -41,84 +41,84 @@ flowchart TD
 
 ---
 
-## 依賴注入（DI）說明
+## Dependency Injection (DI) Overview
 
-Dialog 的 DI（Dependency Injection）設計讓你能彈性注入各種資料、設定、甚至 service 到 Dialog 內部元件。這是 Angular 溝通與擴充的核心。
+Dialog's DI (Dependency Injection) design allows flexible injection of various data, configuration, or services into internal dialog components. This is the core of Angular communication and extensibility.
 
-### 內建 Provider 說明
+### Built-in Provider Overview
 
-- **DIALOG_DEFAULT_PROVIDER**：DialogService 會自動用這個 token 注入 DefaultDialogConfig
-- **DIALOG_COMPONENT_PROVIDER**：DialogService 會自動用這個 token 注入 DialogComponentConfig
+- **DIALOG_DEFAULT_PROVIDER**: DialogService automatically injects DefaultDialogConfig with this token
+- **DIALOG_COMPONENT_PROVIDER**: DialogService automatically injects DialogComponentConfig with this token
 
-### 典型用法
+### Typical Usage
 
-DialogService 會自動把 config 用 provider 注入 overlay，DialogComponent 只要用 @Inject(TOKEN) 就能拿到 config。
+DialogService automatically injects config via provider into overlay. DialogComponent can use @Inject(TOKEN) to get config.
 
 ```typescript
-// dialog.provider.ts 內部
+// Inside dialog.provider.ts
 export const DIALOG_DEFAULT_PROVIDER = new InjectionToken<DefaultDialogConfig>('DIALOG_DEFAULT_PROVIDER');
 export const DIALOG_COMPONENT_PROVIDER = new InjectionToken<DialogComponentConfig>('DIALOG_COMPONENT_PROVIDER');
 
-// DialogService 會自動這樣注入
+// DialogService injects like this
 const dialogProvider = { provide: DIALOG_DEFAULT_PROVIDER, useValue: config };
 const dialogComponentProvider = { provide: DIALOG_COMPONENT_PROVIDER, useValue: config };
 
-// DialogComponent 只要這樣拿到 config
+// DialogComponent gets config like this
 @Component({...})
 export class MyDialog {
   constructor(@Inject(DIALOG_COMPONENT_PROVIDER) public config: DialogComponentConfig) {}
 }
 ```
 
-### 自訂資料 Token
+### Custom Data Token
 
-你可以自訂 InjectionToken 傳遞任何資料或 service：
+You can define custom InjectionToken to pass any data or service:
 
 ```typescript
-// 定義自訂 Token
+// Define custom Token
 export const MY_TOKEN = new InjectionToken<MyType>('MY_TOKEN');
 
-// 傳入 provider
+// Pass in provider
 const providers = [{ provide: MY_TOKEN, useValue: { foo: 'bar' } }];
 const ref = dialogService.openComponentDialog(config, providers);
 
-// Dialog 內注入
+// Inject in Dialog
 @Component({...})
 export class MyDialog {
   constructor(@Inject(MY_TOKEN) public data: any) {}
 }
 ```
 
-### DI 實作重點
+### DI Implementation Notes
 
-- 這些 provider 實作在 dialog.provider.ts
-- 你可以用同樣方式傳遞任何資料或 service
-- DialogService 會自動處理 config 注入，進階用戶可自訂 provider
+- These providers are implemented in dialog.provider.ts
+- You can pass any data or service in the same way
+- DialogService automatically handles config injection; advanced users can customize providers
 
 ---
 
-# 工具與 Utilities
+# Utilities
 
-這些 utilities 是 DialogService 內部的核心，讓彈窗能彈性擴充、客製化。你可以直接用來打造自己的 Dialog 行為。
+These utilities are core to DialogService, enabling flexible extension and customization. You can use them directly to build your own dialog behaviors.
 
 ## overlay-ref-builder.util.ts
 
-- 用來建立與設定 Angular CDK 的 OverlayRef
-- 封裝 overlay 建立、關閉、事件流等細節
-- 讓 DialogService 可以快速產生 overlay 實例
+- Used to create and configure Angular CDK OverlayRef
+- Encapsulates overlay creation, closing, event stream, etc.
+- Allows DialogService to quickly generate overlay instances
 
 ## overlay-position-builder.util.ts
 
-- 提供 overlay 位置策略（如置中、客製位置）
-- 你可以用它自訂彈窗出現的位置
+- Provides overlay position strategies (e.g., center, custom positions)
+- You can use it to customize dialog appearance location
 
 ## decorate-overlay-ref.ts
 
-- 將 OverlayRef 包裝成 DecorateOverlayRef
-- 提供 event$ 事件流，讓 Dialog 內外能用 RxJS 溝通
-- 支援 sendEvent、close 等自訂方法
+- Wraps OverlayRef as DecorateOverlayRef
+- Provides event$ stream for RxJS communication inside/outside dialog
+- Supports sendEvent, close, and other custom methods
 
-### 內部運作範例
+### Internal Usage Example
 
 ```typescript
 import { createRefBuilder, createRefInjector } from 'dialog';
@@ -126,34 +126,34 @@ const refBuilder = createRefBuilder(positionBuilder, overlay);
 const refInjector = createRefInjector(injector);
 ```
 
-- DialogService 會用這些 util 產生 overlay、注入 provider、建立事件流
-- 你也能直接用這些工具做進階彈窗
+- DialogService uses these utilities to create overlays, inject providers, and build event streams
+- You can use these tools for advanced dialog customization
 
 ---
 
-# Dialog 資料注入與型別安全回傳
+# Dialog Data Injection & Type-Safe Return
 
-## 如何將資料 DI 進 DialogComponent
+## How to DI Data into DialogComponent
 
-Dialog 支援多種方式將資料注入 DialogComponent：
+Dialog supports multiple ways to inject data into DialogComponent:
 
-1. config.data 欄位（最常用）
-2. @Inject(`DIALOG_COMPONENT_PROVIDER`) 取得完整 DialogComponentConfig
-3. 自訂 InjectionToken 傳遞任意資料或 service
+1. config.data field (most common)
+2. @Inject(`DIALOG_COMPONENT_PROVIDER`) to get full DialogComponentConfig
+3. Custom InjectionToken to pass any data or service
 
-## DI 範圍與多 Dialog 實例
+## DI Scope & Multiple Dialog Instances
 
-- 每次呼叫 openComponentDialog 都會產生一個獨立的 Dialog overlay 與 DI context。
-- 每個 DialogComponent inject DIALOG_COMPONENT_PROVIDER 時，拿到的都是自己那份 config，不會跟其他 dialog 實例共用或干擾。
-- 就算同時開多個 dialog，每個 dialog 的 component 都會各自 inject 到自己那份 DialogComponentConfig。
-- 這是 Angular DI 的作用範圍（scope）機制，overlay 會有自己的 injector，保證資料隔離。
+- Each call to openComponentDialog creates a separate dialog overlay and DI context.
+- Each DialogComponent injects DIALOG_COMPONENT_PROVIDER and gets its own config, isolated from other dialog instances.
+- Even with multiple dialogs open, each dialog's component gets its own DialogComponentConfig.
+- This is Angular DI's scope mechanism; overlay has its own injector, ensuring data isolation.
 
 ---
 
-### config.data 範例
+### config.data Example
 
 ```typescript
-// 父元件
+// Parent component
 const config: DialogComponentConfig = {
   injectorID: 'my-dialog',
   componentRef: () => MyDialogComponent,
@@ -162,27 +162,27 @@ const config: DialogComponentConfig = {
 };
 const ref = dialogService.openComponentDialog<MyPayload>(config);
 
-// DialogComponent 內部
+// Inside DialogComponent
 export class MyDialogComponent {
   constructor(@Inject(DIALOG_COMPONENT_PROVIDER) public config: DialogComponentConfig) {}
   ngOnInit() {
-    // 取得 data
+    // Access data
     const foo = this.config.data.foo;
   }
 }
 ```
 
-#### 自訂 InjectionToken 範例
+#### Custom InjectionToken Example
 
 ```typescript
-// 定義 Token
+// Define Token
 export const MY_DIALOG_DATA = new InjectionToken<MyType>('MY_DIALOG_DATA');
 
-// 父元件
+// Parent component
 const providers = [{ provide: MY_DIALOG_DATA, useValue: { foo: 'bar' } }];
 const ref = dialogService.openComponentDialog<MyPayload>(config, providers);
 
-// DialogComponent 內部
+// Inside DialogComponent
 export class MyDialogComponent {
   constructor(@Inject(MY_DIALOG_DATA) public data: MyType) {}
 }
@@ -190,26 +190,26 @@ export class MyDialogComponent {
 
 ---
 
-## Dialog 回傳資料給父元件（型別安全）
+## Dialog Returns Data to Parent (Type-Safe)
 
-- DialogComponent 內部 inject DecorateOverlayRef<T>，T 為回傳型別
-- 用 sendEvent({ type, data }) 回傳資料，型別自動檢查
-- 父元件用 openComponentDialog<T>()，T 為回傳型別，event$ 會自動推論
+- DialogComponent injects DecorateOverlayRef<T>, T is the return type
+- Use sendEvent({ type, data }) to return data, type is automatically checked
+- Parent uses openComponentDialog<T>(), T is the return type, event$ is automatically inferred
 
-#### 回傳型別與注入型別分離
+#### Separation of Return/Input Types
 
-- config.data: 傳入型別（A）
-- openComponentDialog<B>(config): 回傳型別（B）
-- DialogComponent 可同時 inject config.data (A) 與 DecorateOverlayRef<B>
+- config.data: input type (A)
+- openComponentDialog<B>(config): return type (B)
+- DialogComponent can inject config.data (A) and DecorateOverlayRef<B>
 
-#### 範例
+#### Example
 
 ```typescript
-// 型別定義
+// Type definitions
 interface DialogInput { id: string; foo: string; }
 interface DialogOutput { result: string; }
 
-// 父元件
+// Parent component
 const config: DialogComponentConfig = {
   injectorID: 'my-dialog',
   componentRef: () => MyDialogComponent,
@@ -218,13 +218,13 @@ const config: DialogComponentConfig = {
 };
 const ref = dialogService.openComponentDialog<DialogOutput>(config);
 ref.event$.subscribe(event => {
-  // event.data 型別自動是 DialogOutput
+  // event.data is automatically DialogOutput
   if (event.type === DialogEvent.Enter) {
     console.log(event.data.result);
   }
 });
 
-// DialogComponent 內部
+// Inside DialogComponent
 export class MyDialogComponent {
   constructor(@Inject(DIALOG_COMPONENT_PROVIDER) public config: DialogComponentConfig)
   #ref = inject(DecorateOverlayRef<DialogOutput>);
@@ -236,8 +236,8 @@ export class MyDialogComponent {
 
 ---
 
-## 小結
+## Summary
 
-- DI 與型別安全設計確保彈窗資料流隔離、型別明確
-- Utilities 讓進階用戶可自訂 overlay/ref/事件流
-- 所有 API、型別、事件流皆有型別推論與完整 DI 支援
+- DI and type-safe design ensure dialog data flow isolation and clear types
+- Utilities allow advanced users to customize overlay/ref/event stream
+- All APIs, types, and event streams have type inference and full DI support

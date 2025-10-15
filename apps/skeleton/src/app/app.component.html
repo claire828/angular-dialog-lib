@@ -1,11 +1,37 @@
 <div class="flex min-h-screen items-center justify-center bg-gray-100">
-  <button
-    type="button"
-    (click)="showDialog()"
-    class="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-  >
-    Open Dialog
-  </button>
+  <div class="flex flex-col items-center gap-4">
+    <h1 class="mb-2 text-3xl font-bold text-gray-800">Angular Dialog Library Demo</h1>
+    <p class="mb-6 text-gray-600">Click the buttons below to see different dialog types</p>
+
+    <div class="flex gap-4">
+      <!-- Default Dialog Button -->
+      <button
+        type="button"
+        (click)="showDefaultDialog()"
+        class="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        Open Default Dialog
+      </button>
+
+      <!-- Custom Component Dialog Button -->
+      <button
+        type="button"
+        (click)="showCustomDialog()"
+        class="rounded-lg bg-green-600 px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+      >
+        Open Custom Dialog
+      </button>
+    </div>
+
+    <div class="mt-8 max-w-md rounded-lg bg-white p-4 shadow">
+      <h2 class="mb-2 text-lg font-semibold text-gray-700">Features:</h2>
+      <ul class="list-inside list-disc space-y-1 text-sm text-gray-600">
+        <li><strong>Default Dialog:</strong> Simple text content with buttons</li>
+        <li><strong>Custom Dialog:</strong> Form with type-safe data passing</li>
+        <li>Check the browser console for event logs</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
