@@ -63,8 +63,6 @@ A flexible, type-safe, and feature-rich dialog/modal library for Angular 19+ app
     - [Project Scripts](#project-scripts)
     - [Project Commands](#project-commands)
   - [License](#license)
-  - [Contributing](#contributing)
-  - [Support](#support)
 
 ---
 
@@ -670,15 +668,3 @@ npx nx lint dialog
 ## License
 
 MIT
-
----
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## Support
-
-If you have questions or need help, please open an issue on GitHub.
