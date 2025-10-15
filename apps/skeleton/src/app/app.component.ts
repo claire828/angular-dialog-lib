@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import {
@@ -19,13 +19,14 @@ import { CustomDialogComponent, CustomDialogResult } from './custom-dialog/custo
 })
 export class AppComponent {
   private readonly dialogService = inject(DialogService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * Opens a default dialog with mock configuration
    */
   public showDefaultDialog(): void {
     const ref = this.dialogService.openDefaultDialog(MOCK_CONFIG);
-    ref.event$.pipe(takeUntilDestroyed()).subscribe((event) => {
+    ref.event$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
       console.log('Default Dialog event:', event);
     });
   }
@@ -47,7 +48,7 @@ export class AppComponent {
 
     const ref = this.dialogService.openComponentDialog<CustomDialogResult>(config);
 
-    ref.event$.pipe(takeUntilDestroyed()).subscribe((event) => {
+    ref.event$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
       console.log('Custom Dialog event:', event);
 
       if (event.type === DialogEvent.Enter && event.data) {

@@ -2,11 +2,27 @@
 
 A flexible, type-safe, and feature-rich dialog/modal library for Angular 19+ applications built with Angular CDK Overlay.
 
+![Demo](assets/demo.gif)
+
+> **Note:** This project was built in early 2024 to provide dynamic component dialogs for Angular applications. It does not use the new dynamic component feature introduced in Angular 20.
+> All dynamic dialog logic here is based on Angular 19 and CDK Overlay best practices.
+
+## Features
+
+✨ **Flexible Content**: Support for plain text, Angular components, or custom content  
+🔄 **Bidirectional Data Flow**: Parent-child communication via Angular DI and RxJS  
+🎯 **Type-Safe**: Full TypeScript support with generic types for data passing  
+🎨 **Customizable Styling**: Built-in Tailwind CSS support with customizable appearance  
+🔧 **Advanced Behaviors**: Custom providers, tokens, and overlay strategies  
+📦 **Angular CDK Overlay**: Built on top of Angular CDK for robust positioning and behavior
+
+---
+
 ## Table of Contents
 
 - [Angular Dialog Library](#angular-dialog-library)
-  - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Table of Contents](#table-of-contents)
   - [Quick Start](#quick-start)
   - [Project Structure](#project-structure)
   - [Installation \& Setup](#installation--setup)
@@ -49,17 +65,6 @@ A flexible, type-safe, and feature-rich dialog/modal library for Angular 19+ app
   - [License](#license)
   - [Contributing](#contributing)
   - [Support](#support)
-
----
-
-## Features
-
-✨ **Flexible Content**: Support for plain text, Angular components, or custom content  
-🔄 **Bidirectional Data Flow**: Parent-child communication via Angular DI and RxJS  
-🎯 **Type-Safe**: Full TypeScript support with generic types for data passing  
-🎨 **Customizable Styling**: Built-in Tailwind CSS support with customizable appearance  
-🔧 **Advanced Behaviors**: Custom providers, tokens, and overlay strategies  
-📦 **Angular CDK Overlay**: Built on top of Angular CDK for robust positioning and behavior
 
 ---
 
